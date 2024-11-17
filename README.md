@@ -2,21 +2,18 @@
 
 *Formato json de los campos de la tabla*
 
-Vuelo = 
-
-{
-  "salida" : "[valor-1]", 
-  "destino" : "[valor-2]", 
-  "avion" : "[valor-3]", 
-  "hs_salida" : "[valor-4]", 
-  "hs_llegada" : "[valor-5]", 
-  "fecha" : "[valor-6]", 
-  "precio" : "[valor-7]", 
-  "capacidad" : "[valor-8]", 
-  "url_Imagen" : "[valor-9]" 
-}
-
-
+Vuelo:
+    {
+    "salida" : "[valor-1]", 
+    "destino" : "[valor-2]", 
+    "avion" : "[valor-3]", 
+    "hs_salida" : "[valor-4]", 
+    "hs_llegada" : "[valor-5]", 
+    "fecha" : "[valor-6]", 
+    "precio" : "[valor-7]", 
+    "capacidad" : "[valor-8]", 
+    "url_Imagen" : "[valor-9]" 
+    }
 
 **Navegacion**
 
@@ -34,11 +31,25 @@ Vuelo =
     - Query: 
         - filtroPor: darle un valor de cualquier campo que tiene la tabla.
         - asc: valor true o false, indica si lo quiere de forma ascendente o descendente. 
+    - Ejemplo:
+        /api/vuelo?filtroPor=salida&asc=true  : En este ejemplo se ordenan los vuelos por salida y en urden ascendente.
 
 *Agregar*
 
     Puede agregar un elemento ingresando en el body un objeto json como el formato del inicio. 
     Si un valor es vacio retorna un error de que falta ese campo.
+    Ejemplo del body: 
+    {
+    "salida" : "oregon",
+    "destino" : "california",
+    "avion" : "planea",
+    "hs_salida" : "15:00:00.00" ,
+    "hs_llegada" : "18:00:00.00" ,
+    "fecha" : "2024-09-24",
+    "precio" : 20000,
+    "capacidad" : 12,
+    "url_Imagen" : "nose"
+    }
 
 *Modificar*
 
