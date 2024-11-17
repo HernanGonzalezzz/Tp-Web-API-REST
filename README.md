@@ -3,16 +3,17 @@
 *Formato json de los campos de la tabla*
 
 Vuelo = 
+
 {
-  "salida" : "[valor-1]",
-  "destino" : "[valor-2]",
-  "avion" : "[valor-3]",
-  "hs_salida" : "[valor-4]",
-  "hs_llegada" : "[valor-5]",
-  "fecha" : "[valor-6]",
-  "precio" : "[valor-7]",
-  "capacidad" : "[valor-8]",
-  "url_Imagen" : "[valor-9]"
+  "salida" : "[valor-1]", 
+  "destino" : "[valor-2]", 
+  "avion" : "[valor-3]", 
+  "hs_salida" : "[valor-4]", 
+  "hs_llegada" : "[valor-5]", 
+  "fecha" : "[valor-6]", 
+  "precio" : "[valor-7]", 
+  "capacidad" : "[valor-8]", 
+  "url_Imagen" : "[valor-9]" 
 }
 
 
@@ -36,11 +37,13 @@ Vuelo =
 
 *Agregar*
 
-    Puede agregar un elemento ingresando en el body un objeto json como el formato del inicio. Si un valor es vacio retorna un error de que falta ese campo.
+    Puede agregar un elemento ingresando en el body un objeto json como el formato del inicio. 
+    Si un valor es vacio retorna un error de que falta ese campo.
 
 *Modificar*
 
-    Se puede modificar un vuelo. Para hacerlo ingresa los valores utilize el mismo formato que para agregar un vuelo(Con un json). Tenga encuenta que pueden haber campos sin llenar, osea vacios, o incluso campos sin definir. Ejemplo:
+    Se puede modificar un vuelo. Para hacerlo ingresa los valores utilize el mismo formato que se hace para agregar un vuelo(Con un json).
+    Tenga encuenta que pueden haber campos sin llenar, osea vacios, o incluso campos sin definir. Ejemplo:
 
         {
         "salida" : "",
@@ -48,5 +51,5 @@ Vuelo =
         "avion" : "planeador",
         }
 
-    En este caso va a modificar destino y avion
+    En este caso va a modificar destino y avion.
 
