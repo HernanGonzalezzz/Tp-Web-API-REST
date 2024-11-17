@@ -12,7 +12,7 @@ class ModeloVuelo extends Modelo{
         return $existe;
     }
 
-    public function obtenerVuelos($filtro = null){
+    public function obtenerVuelos($filtro = null, $asc = false){
         $sql = "SELECT * FROM `vuelos` ";
         
         if($filtro){
@@ -36,9 +36,14 @@ class ModeloVuelo extends Modelo{
                     $sql .= ' ORDER BY `capacidad`';
                     break;
             }
+                
+            if ($asc) { 
+                $sql .= " ASC;"; 
+            } else {
+                $sql .= " DESC;"; 
+            }
         }
-
-
+        
         $consulta = $this->db->prepare($sql);
         $consulta->execute();
         $vuelos = $consulta->fetchAll(PDO::FETCH_OBJ);

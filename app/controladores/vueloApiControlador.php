@@ -17,12 +17,16 @@ class VueloControlador{
 
     function obtenerTodo($req, $res){
         $filtroPor = null;
-
+        $asc = false;
+        
         if(!empty($req->query->filtroPor)){
             $filtroPor = $req->query->filtroPor;
         }
+        if(!empty($req->query->asc)){
+            $asc = filter_var($req->query->asc, FILTER_VALIDATE_BOOLEAN);//convierto el valor en booleano
+        }
 
-        $vuelos = $this->modeloVuelo->obtenerVuelos($filtroPor);
+        $vuelos = $this->modeloVuelo->obtenerVuelos($filtroPor, $asc);
         return $this->vista->response($vuelos, 200);
     }
 
@@ -40,7 +44,7 @@ class VueloControlador{
     function agregar($req, $res){
         $respuesta = $this->comprobarDatos($req); //compruebo que esten todos los datos
         if($respuesta != null){
-            return $respuesta;
+            return $this->vista->response($respuesta, 400);
         }
 
         $salida = $req->body->salida;
@@ -69,20 +73,44 @@ class VueloControlador{
             return $this->vista->response("El vuelo con id=$id no existe", 404);
         }
 
-        $respuesta = $this->comprobarDatos($req); //compruebo que esten todos los datos
-        if($respuesta != null){
-            return $respuesta;
+        $salida = $vuelo->salida;
+        $destino = $vuelo->destino;
+        $avion = $vuelo->avion;
+        $hs_salida = $vuelo->hs_salida;
+        $hs_llegada = $vuelo->hs_llegada;
+        $fecha = $vuelo->fecha;
+        $precio = $vuelo->precio;
+        $capacidad = $vuelo->capacidad;
+        $url = $vuelo->url_Imagen;
+
+        if(isset($req->body->salida) && !empty($req->body->salida)){
+            $salida = $req->body->salida;
+        }
+        if(isset($req->body->destino) && !empty($req->body->destino)){
+            $destino = $req->body->destino;
+        }
+        if(isset($req->body->avion) && !empty($req->body->avion)){
+            $avion = $req->body->avion;
+        }
+        if(isset($req->body->hs_salida) && !empty($req->body->hs_salida)){
+            $hs_salida = $req->body->hs_salida;
+        }
+        if(isset($req->body->hs_llegada) && !empty($req->body->hs_llegada)){
+            $hs_llegada = $req->body->hs_llegada;
+        }
+        if(isset($req->body->fecha) && !empty($req->body->fecha)){
+            $fecha = $req->body->fecha;
+        }
+        if(isset($req->body->precio) && !empty($req->body->precio)){
+            $precio = $req->body->precio;
+        }
+        if(isset($req->body->capacidad) && !empty($req->body->capacidad)){
+            $capacidad = $req->body->capacidad;
+        }
+        if(isset($req->body->url_Imagen) && !empty($req->body->url_Imagen)){
+            $url = $req->body->url_Imagen;
         }
         
-        $salida = $req->body->salida;
-        $destino = $req->body->destino;
-        $avion = $req->body->avion;
-        $hs_salida = $req->body->hs_salida;
-        $hs_llegada = $req->body->hs_llegada;
-        $fecha = $req->body->fecha;
-        $precio = $req->body->precio;
-        $capacidad = $req->body->capacidad;
-        $url = $req->body->url_Imagen;
 
         $this->modeloVuelo->modificarVuelo($salida,$destino,$avion,$hs_salida,$hs_llegada,$fecha,$precio,$capacidad, $url,$id);
 
@@ -92,31 +120,31 @@ class VueloControlador{
  
     private function comprobarDatos($req){
         if(empty($req->body->salida)){
-            return $this->vista->response("Falta la salida", 400);
+            return "Falta la salida";
         }
         if(empty($req->body->destino)){
-            return $this->vista->response("Falta el destino", 400);
+            return "Falta el destino";
         }
         if(empty($req->body->avion)){
-            return $this->vista->response("Falta el avion", 400);
+            return "Falta el avion";
         }
         if(empty($req->body->hs_salida)){
-            return $this->vista->response("Falta la hs de salida", 400);
+            return "Falta la hs de salida";
         }
         if(empty($req->body->hs_llegada)){
-            return $this->vista->response("Falta la hs de llegada", 400);
+            return "Falta la hs de llegada";
         }
         if(empty($req->body->fecha)){
-            return $this->vista->response("Falta la fecha", 400);
+            return "Falta la fecha";
         }
         if(empty($req->body->precio)){
-            return $this->vista->response("Falta el precio", 400);
+            return "Falta el precio";
         }
         if(empty($req->body->capacidad)){
-            return $this->vista->response("Falta la capacidad", 400);
+            return "Falta la capacidad";
         }
         if(empty($req->body->url_Imagen)){
-            return $this->vista->response("Falta la imagen", 400);
+            return "Falta la imagen";
         }
         return null;
     }
