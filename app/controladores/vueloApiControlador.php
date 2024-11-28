@@ -16,17 +16,17 @@ class VueloControlador{
     }
 
     function obtenerTodo($req, $res){
-        $filtroPor = null;
-        $asc = false;
+        $clasificar = null;
+        $order = null;
         
-        if(!empty($req->query->filtroPor)){
-            $filtroPor = $req->query->filtroPor;
+        if(!empty($req->query->clasificar)){
+            $clasificar = $req->query->clasificar;
         }
-        if(!empty($req->query->asc)){
-            $asc = filter_var($req->query->asc, FILTER_VALIDATE_BOOLEAN);//convierto el valor en booleano
+        if(!empty($req->query->order)){
+            $order = $req->query->order;
         }
 
-        $vuelos = $this->modeloVuelo->obtenerVuelos($filtroPor, $asc);
+        $vuelos = $this->modeloVuelo->obtenerVuelos($clasificar, $order);
         return $this->vista->response($vuelos, 200);
     }
 
@@ -50,14 +50,13 @@ class VueloControlador{
         $salida = $req->body->salida;
         $destino = $req->body->destino;
         $avion = $req->body->avion;
-        $hsSalida = $req->body->hs_salida;
-        $hsLlegada = $req->body->hs_llegada;
-        $fecha = $req->body->fecha;
+        $fechaSalida = $req->body->fecha_salida;
+        $fechaLlegada = $req->body->fecha_llegada;
         $precio = $req->body->precio;
         $capacidad = $req->body->capacidad;
         $url = $req->body->url_Imagen;
 
-        $id = $this->modeloVuelo->agregarVuelo($salida, $destino, $avion, $hsSalida, $hsLlegada, $fecha, $precio, $capacidad, $url);
+        $id = $this->modeloVuelo->agregarVuelo($salida, $destino, $avion, $fechaSalida, $fechaLlegada, $precio, $capacidad, $url);
         if(!$id){
             return $this->vista->response("El vuelo no se pudo agregar", 500);
         }
@@ -76,9 +75,8 @@ class VueloControlador{
         $salida = $vuelo->salida;
         $destino = $vuelo->destino;
         $avion = $vuelo->avion;
-        $hs_salida = $vuelo->hs_salida;
-        $hs_llegada = $vuelo->hs_llegada;
-        $fecha = $vuelo->fecha;
+        $fechaSalida = $req->body->fecha_salida;
+        $fechaLlegada = $req->body->fecha_llegada;
         $precio = $vuelo->precio;
         $capacidad = $vuelo->capacidad;
         $url = $vuelo->url_Imagen;
@@ -92,14 +90,11 @@ class VueloControlador{
         if(isset($req->body->avion) && !empty($req->body->avion)){
             $avion = $req->body->avion;
         }
-        if(isset($req->body->hs_salida) && !empty($req->body->hs_salida)){
-            $hs_salida = $req->body->hs_salida;
+        if(isset($req->body->fecha_salida) && !empty($req->body->fecha_salida)){
+            $fechaSalida = $req->body->fecha_salida;
         }
-        if(isset($req->body->hs_llegada) && !empty($req->body->hs_llegada)){
-            $hs_llegada = $req->body->hs_llegada;
-        }
-        if(isset($req->body->fecha) && !empty($req->body->fecha)){
-            $fecha = $req->body->fecha;
+        if(isset($req->body->fecha_llegada) && !empty($req->body->fecha_llegada)){
+            $fechaLlegada = $req->body->fecha_llegada;
         }
         if(isset($req->body->precio) && !empty($req->body->precio)){
             $precio = $req->body->precio;
@@ -112,12 +107,25 @@ class VueloControlador{
         }
         
 
-        $this->modeloVuelo->modificarVuelo($salida,$destino,$avion,$hs_salida,$hs_llegada,$fecha,$precio,$capacidad, $url,$id);
+        $this->modeloVuelo->modificarVuelo($salida,$destino,$avion,$fechaSalida,$fechaLlegada,$precio,$capacidad, $url,$id);
 
         $vuelo = $this->modeloVuelo->obtenerVuelo($id);
         return $this->vista->response($vuelo); //retorno el vuelo que modifique
     }
  
+    public function eliminar($req, $res){
+        $id = $req->params->id;
+
+        $vuelo = $this->modeloVuelo->obtenerVuelo($id);
+        if(!$vuelo){
+            return $this->vista->response("El vuelo con id=$id no existe", 404);
+        }
+
+        $this->modeloVuelo->eliminarVuelo($id);
+
+        return $this->vista->response("El vuelo con id=$id fue eliminado");
+    }
+
     private function comprobarDatos($req){
         if(empty($req->body->salida)){
             return "Falta la salida";
@@ -128,14 +136,11 @@ class VueloControlador{
         if(empty($req->body->avion)){
             return "Falta el avion";
         }
-        if(empty($req->body->hs_salida)){
-            return "Falta la hs de salida";
+        if(empty($req->body->fecha_salida)){
+            return "Falta la fecha de salida";
         }
-        if(empty($req->body->hs_llegada)){
-            return "Falta la hs de llegada";
-        }
-        if(empty($req->body->fecha)){
-            return "Falta la fecha";
+        if(empty($req->body->fecha_llegada)){
+            return "Falta la fecha de llegada";
         }
         if(empty($req->body->precio)){
             return "Falta el precio";

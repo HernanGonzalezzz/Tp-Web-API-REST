@@ -12,11 +12,11 @@ class ModeloVuelo extends Modelo{
         return $existe;
     }
 
-    public function obtenerVuelos($filtro = null, $asc = false){
+    public function obtenerVuelos($clasificar = null, $order = false){
         $sql = "SELECT * FROM `vuelos` ";
         
-        if($filtro){
-            switch($filtro){
+        if($clasificar){
+            switch($clasificar){
                 case 'salida':
                     $sql .= ' ORDER BY `salida`';
                     break;
@@ -37,10 +37,15 @@ class ModeloVuelo extends Modelo{
                     break;
             }
                 
-            if ($asc) { 
-                $sql .= " ASC;"; 
-            } else {
-                $sql .= " DESC;"; 
+            if ($order) { 
+                switch (strtoupper($order)) {
+                    case 'DESC':
+                        $sql .= ' DESC';
+                        break;
+                    case 'ASC':
+                        $sql .= ' ASC';
+                        break;
+                }
             }
         }
         
@@ -57,9 +62,9 @@ class ModeloVuelo extends Modelo{
     }
 
 
-    function agregarVuelo($salida, $destino, $avion, $hsSalida, $hsLlegada, $fecha, $precio, $capacidad, $url){
-        $consulta = $this->db->prepare("INSERT INTO `vuelos`(`salida`, `destino`, `avion`, `hs_salida`, `hs_llegada`, `fecha`, `precio`, `capacidad`, `url_Imagen`) VALUES (?,?,?,?,?,?,?,?,?)");
-        $consulta->execute([$salida, $destino, $avion, $hsSalida, $hsLlegada, $fecha, $precio, $capacidad, $url]);
+    function agregarVuelo($salida, $destino, $avion, $fechaSalida, $fechaLlegada, $precio, $capacidad, $url){
+        $consulta = $this->db->prepare("INSERT INTO `vuelos`(`salida`, `destino`, `avion`, `fecha_salida`, `fecha_llegada`, `precio`, `capacidad`, `url_Imagen`) VALUES (?,?,?,?,?,?,?,?)");
+        $consulta->execute([$salida, $destino, $avion, $fechaSalida, $fechaLlegada, $precio, $capacidad, $url]);
     
         $id = $this->db->lastInsertId();
     
@@ -72,14 +77,14 @@ class ModeloVuelo extends Modelo{
         $consulta->execute([$id]);
     }
 
-    function modificarVuelo($salida,$destino,$avion,$hs_salida,$hs_llegada,$fecha,$precio,$capacidad, $url_Imagen,$id){
-        $consulta = $this->db->prepare("UPDATE `vuelos` SET `salida`=?,`destino`=?,`avion`=?,`hs_salida`=?,`hs_llegada`=?,`fecha`=?,`precio`=?,`capacidad`=?, `url_Imagen`=? WHERE `id`=?");
-        $consulta->execute([$salida,$destino,$avion,$hs_salida,$hs_llegada,$fecha,$precio,$capacidad, $url_Imagen,$id]);
+    function modificarVuelo($salida,$destino,$avion,$fecha_salida,$fecha_llegada,$precio,$capacidad, $url_Imagen,$id){
+        $consulta = $this->db->prepare("UPDATE `vuelos` SET `salida`=?,`destino`=?,`avion`=?,`fecha_salida`=?,`fecha_llegada`=?,`precio`=?,`capacidad`=?, `url_Imagen`=? WHERE `id`=?");
+        $consulta->execute([$salida,$destino,$avion,$fecha_salida,$fecha_llegada,$precio,$capacidad, $url_Imagen,$id]);
     }
 
-    function insertarVuelo($salida,$destino,$avion,$hs_salida,$hs_llegada,$fecha,$precio,$capacidad, $url_Imagen){
-        $consulta = $this->db->prepare("INSERT INTO `vuelos`(`salida`, `destino`, `avion`, `hs_salida`, `hs_llegada`, `fecha`, `precio`, `capacidad`, `url_Imagen`) VALUES (?,?,?,?,?,?,?,?,?)");
-        $consulta->execute([$salida,$destino,$avion,$hs_salida,$hs_llegada,$fecha,$precio,$capacidad, $url_Imagen]);
+    function insertarVuelo($salida,$destino,$avion,$fecha_salida,$fecha_llegada,$precio,$capacidad, $url_Imagen){
+        $consulta = $this->db->prepare("INSERT INTO `vuelos`(`salida`, `destino`, `avion`, `fecha_salida`, `fecha_llegada`, `precio`, `capacidad`, `url_Imagen`) VALUES (?,?,?,?,?,?,?,?)");
+        $consulta->execute([$salida,$destino,$avion,$fecha_salida,$fecha_llegada,$precio,$capacidad, $url_Imagen]);
     }
     
 }
